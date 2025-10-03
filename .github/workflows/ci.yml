@@ -36,7 +36,18 @@ jobs:
 
       - name: Run unit tests
         run: npm run test
-
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v6.0.0
+        env:
+         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+         args: >
+          -Dsonar.projectKey=node-ci-lab
+          -Dsonar.sources=.
+          -Dsonar.exclusions=node_modules/**,coverage/**,**/*.test.js,**/*.spec.js
+          -Dsonar.tests=__tests__
+          -Dsonar.test.inclusions=**/*.test.js,**/*.spec.js
 
       - name: Create deployment package
         run: |
